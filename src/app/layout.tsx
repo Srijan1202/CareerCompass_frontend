@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
-import Navbar from "../../components/ui/navbar"
+import Navbar from "../../components/navbar"
 import "./globals.css"
 
 export const metadata: Metadata = {
