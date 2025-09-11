@@ -52,7 +52,7 @@ export default function Navbar() {
 
   const checkAuthStatus = async () => {
     try {
-      const token = localStorage.getItem("authToken")
+      const token = localStorage.getItem("authTokaen")
       if (!token) {
         setIsLoading(false)
         return
