@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
 import { Brain, FileText, TrendingUp, Upload, Cpu, Target, Rocket, Github, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 export default function HomePage() {
   const fadeInUp = {
@@ -107,7 +108,8 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                CareerCompass – Your AI Career Navigator
+                <span className="text-neutral-800">CareerCompass</span> 
+                – Your AI Career Navigator
               </motion.h1>
               <motion.p
                 className="text-xl md:text-2xl mb-8 text-blue-50 text-pretty"
@@ -124,10 +126,12 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
+                <Link href="/onboarding">
                 <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-semibold">
                   Get Started
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
+                </Link>
                 <Button
                   size="lg"
                   variant="outline"
