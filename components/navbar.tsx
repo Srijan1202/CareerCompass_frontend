@@ -17,6 +17,34 @@ export default function Navbar() {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  // Navbar scroll state
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+
+      // Navbar background toggle
+      setScrolled(currentScroll > 50);
+
+      // Hide/show on scroll direction
+      if (currentScroll > lastScrollY && currentScroll > 100) {
+        // scrolling down
+        setHidden(true);
+      } else {
+        // scrolling up
+        setHidden(false);
+      }
+
+      setLastScrollY(currentScroll);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   // Check authentication status on component mount
   useEffect(() => {
     checkAuthStatus()
@@ -76,7 +104,12 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 z-50">
+   <nav
+      className={`fixed left-1/2 top-0 mt-2 transform -translate-x-1/2 w-3/4 rounded-2xl border-b border-gray-200 z-50 transition-all duration-500
+        // ${scrolled ?  "bg-transparent backdrop-blur-2xl border-b-0" :"bg-white/95 backdrop-blur-md shadow-md" }
+        ${hidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}
+      `}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}

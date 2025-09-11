@@ -107,7 +107,7 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                CareerCompass – Your AI Career Navigator
+                <span className="text-neutral-800">CareerCompass</span> – Your AI Career Navigator
               </motion.h1>
               <motion.p
                 className="text-xl md:text-2xl mb-8 text-blue-100 text-pretty"
