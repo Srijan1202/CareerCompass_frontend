@@ -75,7 +75,7 @@ export default function LoginPage() {
                 <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">{error}</div>
               )}
 
-              <div className="space-y-2">
+              <div className="space-y-2 text-gray-900">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -84,11 +84,11 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-11"
+                  className="h-11 text-neutral-800"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 text-gray-900">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
@@ -98,7 +98,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-11 pr-10"
+                    className="h-11 pr-10 text-neutral-800"
                   />
                   <button
                     type="button"

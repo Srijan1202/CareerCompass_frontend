@@ -97,7 +97,7 @@ export default function SignupPage() {
                 <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">{error}</div>
               )}
 
-              <div className="space-y-2">
+              <div className="space-y-2 text-gray-900">
                 <Label htmlFor="name">Full Name</Label>
                 <Input
                   id="name"
@@ -107,11 +107,11 @@ export default function SignupPage() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="h-11"
+                  className="h-11 text-neutral-800"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 text-gray-900">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -121,11 +121,11 @@ export default function SignupPage() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="h-11"
+                  className="h-11 text-neutral-800"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 text-gray-900">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
@@ -136,7 +136,7 @@ export default function SignupPage() {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="h-11 pr-10"
+                    className="h-11 pr-10 text-neutral-800"
                   />
                   <button
                     type="button"
@@ -148,7 +148,7 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 text-gray-900">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
                 <div className="relative">
                   <Input
@@ -159,7 +159,7 @@ export default function SignupPage() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
-                    className="h-11 pr-10"
+                    className="h-11 pr-10 text-neutral-800"
                   />
                   <button
                     type="button"
