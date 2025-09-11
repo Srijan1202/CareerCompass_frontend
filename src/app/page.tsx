@@ -1,9 +1,10 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Button } from "../../components/ui/button"
-import { Card, CardContent } from "../../components/ui/card"
+import { Button } from "../components/ui/button"
+import { Card, CardContent } from "../components/ui/card"
 import { Brain, FileText, TrendingUp, Upload, Cpu, Target, Rocket, Github, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 export default function HomePage() {
   const fadeInUp = {
@@ -102,15 +103,16 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
             >
               <motion.h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance text-white"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <span className="text-neutral-800">CareerCompass</span> – Your AI Career Navigator
+                <span className="text-neutral-800">CareerCompass</span> 
+                – Your AI Career Navigator
               </motion.h1>
               <motion.p
-                className="text-xl md:text-2xl mb-8 text-blue-100 text-pretty"
+                className="text-xl md:text-2xl mb-8 text-blue-50 text-pretty"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
@@ -124,14 +126,16 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
+                <Link href="/onboarding">
                 <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-semibold">
                   Get Started
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
+                </Link>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white/10 bg-transparent"
+                  className="border-white text-white hover:bg-white hover:text-blue-700 bg-transparent"
                 >
                   Learn More
                 </Button>
@@ -147,7 +151,7 @@ export default function HomePage() {
               <div className="w-full max-w-md aspect-square bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <div className="text-center">
                   <Brain className="h-24 w-24 mx-auto mb-4 text-blue-200" />
-                  <p className="text-lg font-medium text-blue-100">AI-Powered Career Intelligence</p>
+                  <p className="text-lg font-medium text-blue-50">AI-Powered Career Intelligence</p>
                 </div>
               </div>
             </motion.div>
