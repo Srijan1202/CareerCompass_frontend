@@ -1,9 +1,20 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Button } from "../components/ui/button"
-import { Card, CardContent } from "../components/ui/card"
-import { Brain, FileText, TrendingUp, Upload, Cpu, Target, Rocket, Github, ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Brain,
+  FileText,
+  TrendingUp,
+  Upload,
+  Cpu,
+  Target,
+  Rocket,
+  Github,
+  ArrowRight,
+  MessageCircle,
+} from "lucide-react"
 import Link from "next/link"
 
 export default function HomePage() {
@@ -108,11 +119,10 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <span className="text-neutral-800">CareerCompass</span> 
-                – Your AI Career Navigator
+                CareerCompass – Your AI Career Navigator
               </motion.h1>
               <motion.p
-                className="text-xl md:text-2xl mb-8 text-blue-50 text-pretty"
+                className="text-xl md:text-2xl mb-8 text-white/90 text-pretty"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
@@ -126,19 +136,22 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <Link href="/onboarding">
-                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-semibold">
-                  Get Started
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link href="/signup">
+                  <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-semibold">
+                    Get Started
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
                 </Link>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-blue-700 bg-transparent"
-                >
-                  Learn More
-                </Button>
+                <Link href="/chat">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white text-white hover:bg-white hover:text-blue-700 bg-white/10 backdrop-blur-sm"
+                  >
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Chat with AI Mentor
+                  </Button>
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -150,8 +163,8 @@ export default function HomePage() {
             >
               <div className="w-full max-w-md aspect-square bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <div className="text-center">
-                  <Brain className="h-24 w-24 mx-auto mb-4 text-blue-200" />
-                  <p className="text-lg font-medium text-blue-50">AI-Powered Career Intelligence</p>
+                  <Brain className="h-24 w-24 mx-auto mb-4 text-white/80" />
+                  <p className="text-lg font-medium text-white/90">AI-Powered Career Intelligence</p>
                 </div>
               </div>
             </motion.div>
@@ -278,14 +291,30 @@ export default function HomePage() {
               Join thousands of students and professionals who are already using CareerCompass to accelerate their
               career growth.
             </p>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8"
-              >
-                Get Started Free
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href="/signup">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8"
+                >
+                  Get Started Free
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href="/chat">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-8 bg-transparent"
+                >
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  Try AI Mentor
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
         </div>
