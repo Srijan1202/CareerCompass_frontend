@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { Button } from "../components/ui/button"
 import { Brain, Menu, X, LogOut } from "lucide-react"
 import Link from "next/link"
-import { useAuth } from "@/contexts/auth-context"
+import { useAuth } from "../contexts/auth-context"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)

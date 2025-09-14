@@ -1,8 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "../components/ui/button"
+import { Card, CardContent } from "../components/ui/card"
 import {
   Brain,
   FileText,
@@ -16,7 +16,7 @@ import {
   MessageCircle,
 } from "lucide-react"
 import Link from "next/link"
-import Navbar from "@/components/navbar"
+import Navbar from "../components/navbar"
 
 export default function HomePage() {
   const fadeInUp = {

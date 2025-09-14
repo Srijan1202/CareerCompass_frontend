@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { Brain, Target, TrendingUp, Users, User, Mail, Briefcase, GraduationCap } from "lucide-react"
 import ProtectedRoute from "../../components/protected-route"
 import { useAuth } from "../../contexts/auth-context"

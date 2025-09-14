@@ -11,7 +11,7 @@ import {
   updateProfile,
 } from "firebase/auth"
 import { doc, setDoc, getDoc } from "firebase/firestore"
-import { auth, googleProvider, microsoftProvider, db } from "@/lib/firebase"
+import { auth, googleProvider, microsoftProvider, db } from "../lib/firebase"
 
 interface AuthUser extends User {
   displayName: string | null
