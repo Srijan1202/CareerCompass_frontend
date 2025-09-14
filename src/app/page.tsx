@@ -16,6 +16,7 @@ import {
   MessageCircle,
 } from "lucide-react"
 import Link from "next/link"
+import Navbar from "@/components/navbar"
 
 export default function HomePage() {
   const fadeInUp = {
@@ -75,6 +76,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Navbar />
+
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 text-white pt-16">
         {/* Animated Background Shapes */}

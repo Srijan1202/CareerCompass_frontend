@@ -2,10 +2,35 @@ import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json()
+    const { message, userContext } = await request.json()
 
     if (!message) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 })
+    }
+
+    let systemPrompt = `You are a helpful AI career mentor for CareerCompass. You specialize in:
+    - Resume writing and optimization
+    - Interview preparation and tips
+    - Career guidance and planning
+    - Skill development recommendations
+    - Job search strategies
+    - Professional networking advice
+    - Career transitions and changes
+    
+    Always provide practical, actionable advice. Keep responses concise but helpful. 
+    Focus on career-related topics and gently redirect if users ask about unrelated subjects.`
+
+    if (userContext) {
+      systemPrompt += `\n\nUser Profile Context:
+      - Name: ${userContext.name || "Not provided"}
+      - Dream Job/Career Goal: ${userContext.dreamJob || "Not specified"}
+      - Education: ${userContext.education || "Not provided"}
+      - Skills: ${userContext.skills || "Not provided"}
+      - Interests: ${userContext.interests || "Not provided"}
+      - Achievements: ${userContext.achievements || "Not provided"}
+      - Experience: ${userContext.experience || "Not provided"}
+      
+      Use this information to provide personalized career advice. Reference their specific goals, skills, and background when relevant. Tailor your recommendations to their dream job and current skill level.`
     }
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -19,17 +44,7 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: "system",
-            content: `You are a helpful AI career mentor for CareerCompass. You specialize in:
-            - Resume writing and optimization
-            - Interview preparation and tips
-            - Career guidance and planning
-            - Skill development recommendations
-            - Job search strategies
-            - Professional networking advice
-            - Career transitions and changes
-            
-            Always provide practical, actionable advice. Keep responses concise but helpful. 
-            Focus on career-related topics and gently redirect if users ask about unrelated subjects.`,
+            content: systemPrompt,
           },
           {
             role: "user",

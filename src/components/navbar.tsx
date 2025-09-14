@@ -5,95 +5,45 @@ import { motion } from "framer-motion"
 import { Button } from "../components/ui/button"
 import { Brain, Menu, X, LogOut } from "lucide-react"
 import Link from "next/link"
-
-interface AuthUser {
-  id: string
-  name: string
-  email: string
-}
+import { useAuth } from "@/contexts/auth-context"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [user, setUser] = useState<AuthUser | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const { user, loading, logout } = useAuth()
 
   // Navbar scroll state
-  const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScroll = window.scrollY;
+      const currentScroll = window.scrollY
 
       // Navbar background toggle
-      setScrolled(currentScroll > 50);
+      setScrolled(currentScroll > 50)
 
       // Hide/show on scroll direction
       if (currentScroll > lastScrollY && currentScroll > 100) {
         // scrolling down
-        setHidden(true);
+        setHidden(true)
       } else {
         // scrolling up
-        setHidden(false);
+        setHidden(false)
       }
 
-      setLastScrollY(currentScroll);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
-  // Check authentication status on component mount
-  useEffect(() => {
-    checkAuthStatus()
-  }, [])
-
-  const checkAuthStatus = async () => {
-    try {
-      const token = localStorage.getItem("authTokaen")
-      if (!token) {
-        setIsLoading(false)
-        return
-      }
-
-      const response = await fetch("/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-
-      if (response.ok) {
-        const userData = await response.json()
-        setUser(userData)
-      } else {
-        localStorage.removeItem("authToken")
-      }
-    } catch (error) {
-      console.error("Auth check failed:", error)
-      localStorage.removeItem("authToken")
-    } finally {
-      setIsLoading(false)
+      setLastScrollY(currentScroll)
     }
-  }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [lastScrollY])
 
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem("authToken")
-      await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      await logout()
     } catch (error) {
       console.error("Logout failed:", error)
-    } finally {
-      localStorage.removeItem("authToken")
-      setUser(null)
     }
   }
 
@@ -104,9 +54,9 @@ export default function Navbar() {
   ]
 
   return (
-   <nav
+    <nav
       className={`fixed left-1/2 top-0 mt-2 transform -translate-x-1/2 w-3/4 rounded-2xl border-b border-gray-200 z-50 transition-all duration-500
-        // ${scrolled ?  "bg-transparent backdrop-blur-2xl border-b-0" :"bg-white/95 backdrop-blur-md shadow-md" }
+        ${scrolled ? "bg-transparent backdrop-blur-2xl border-b-0" : "bg-white/95 backdrop-blur-md shadow-md"}
         ${hidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}
       `}
     >
@@ -135,16 +85,23 @@ export default function Navbar() {
 
           {/* Auth Section */}
           <div className="hidden md:flex items-center space-x-4">
-            {isLoading ? (
+            {loading ? (
               <div className="w-8 h-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
             ) : user ? (
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <LogOut className="h-4 w-4 text-blue-600" />
+                    <span className="text-sm font-medium text-blue-600">
+                      {user.displayName?.charAt(0) || user.email?.charAt(0) || "U"}
+                    </span>
                   </div>
-                  <span className="text-sm font-medium text-gray-700">{user.name}</span>
+                  <span className="text-sm font-medium text-gray-700">{user.displayName || user.email}</span>
                 </div>
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm" className="text-gray-600 hover:text-blue-600">
+                    Dashboard
+                  </Button>
+                </Link>
                 <Button variant="ghost" size="sm" onClick={handleLogout} className="text-gray-600 hover:text-red-600">
                   <LogOut className="h-4 w-4 mr-1" />
                   Logout
@@ -193,7 +150,7 @@ export default function Navbar() {
               ))}
 
               <div className="border-t border-gray-200 pt-4">
-                {isLoading ? (
+                {loading ? (
                   <div className="flex justify-center">
                     <div className="w-6 h-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
                   </div>
@@ -201,10 +158,22 @@ export default function Navbar() {
                   <div className="space-y-3">
                     <div className="flex items-center space-x-2 px-2">
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <LogOut className="h-4 w-4 text-blue-600" />
+                        <span className="text-sm font-medium text-blue-600">
+                          {user.displayName?.charAt(0) || user.email?.charAt(0) || "U"}
+                        </span>
                       </div>
-                      <span className="text-sm font-medium text-gray-700">{user.name}</span>
+                      <span className="text-sm font-medium text-gray-700">{user.displayName || user.email}</span>
                     </div>
+                    <Link href="/dashboard" className="block">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-start text-gray-600 hover:text-blue-600"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Dashboard
+                      </Button>
+                    </Link>
                     <Button
                       variant="ghost"
                       size="sm"

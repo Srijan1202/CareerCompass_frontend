@@ -11,6 +11,9 @@ import { Label } from "@/components/ui/label"
 import { Brain, Eye, EyeOff, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useAuth } from "../../contexts/auth-context"
+import { FcGoogle } from "react-icons/fc"
+import { FaMicrosoft } from "react-icons/fa"
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -24,6 +27,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
+  const { signUp, signInWithGoogle, signInWithMicrosoft } = useAuth()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -44,29 +48,36 @@ export default function SignupPage() {
     }
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      })
+      await signUp(formData.email, formData.password, formData.name)
+      router.push("/onboarding")
+    } catch (error: unknown) {
+      setError((error instanceof Error ? error.message : "Registration failed"))
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-      const data = await response.json()
+  const handleGoogleSignUp = async () => {
+    setIsLoading(true)
+    setError("")
+    try {
+      await signInWithGoogle()
+      router.push("/onboarding")
+    } catch (error: unknown) {
+      setError((error instanceof Error ? error.message : "Google sign-up failed"))
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-      if (response.ok) {
-        // Store JWT token
-        localStorage.setItem("authToken", data.token)
-        router.push("/onboarding")
-      } else {
-        setError(data.message || "Registration failed")
-      }
-    } catch (error) {
-      setError("Network error. Please try again.")
+  const handleMicrosoftSignUp = async () => {
+    setIsLoading(true)
+    setError("")
+    try {
+      await signInWithMicrosoft()
+      router.push("/onboarding")
+    } catch (error: unknown) {
+      setError((error instanceof Error ? error.message : "Microsoft sign-up failed"))
     } finally {
       setIsLoading(false)
     }
@@ -92,6 +103,38 @@ export default function SignupPage() {
           </CardHeader>
 
           <CardContent>
+            <div className="space-y-3 mb-6">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full h-11 border-gray-300 hover:bg-gray-50 bg-transparent"
+                onClick={handleGoogleSignUp}
+                disabled={isLoading}
+              >
+                <FcGoogle className="h-5 w-5 mr-2" />
+                Continue with Google
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full h-11 border-gray-300 hover:bg-gray-50 bg-transparent"
+                onClick={handleMicrosoftSignUp}
+                disabled={isLoading}
+              >
+                <FaMicrosoft className="h-5 w-5 mr-2 text-blue-600" />
+                Continue with Microsoft
+              </Button>
+            </div>
+
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Or continue with email</span>
+              </div>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
                 <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">{error}</div>
