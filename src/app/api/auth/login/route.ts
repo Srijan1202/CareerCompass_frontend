@@ -1,10 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server"
 
+const BACKEND_URL = "https://82ce67d3836c.ngrok-free.app/api/auth/login"
+
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json()
+    const body = await request.json()
+    const { email, password } = body
 
-    const backendResponse = await fetch(`${process.env.SPRING_BOOT_API_URL}/api/auth/login`, {
+    if (!email || !password) {
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
+    }
+
+    // Forward the request to Spring Boot backend
+    const response = await fetch(BACKEND_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -12,15 +20,14 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({ email, password }),
     })
 
-    const data = await backendResponse.json()
-
-    if (backendResponse.ok) {
-      return NextResponse.json(data)
-    } else {
-      return NextResponse.json({ message: data.message || "Login failed" }, { status: backendResponse.status })
+    if (!response.ok) {
+      return NextResponse.json({ message: "Invalid credentials" }, { status: 401 })
     }
+
+    const data = await response.json()
+    return NextResponse.json(data, { status: 200 })
   } catch (error) {
-    console.error("Login API error:", error)
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 })
+    console.error("Login error:", error)
+    return NextResponse.json({ message: "Login failed" }, { status: 500 })
   }
 }
