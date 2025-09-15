@@ -102,22 +102,25 @@ export default function OnboardingPage() {
     setIsLoading(true)
     try {
       if (activeTab === "upload" && uploadedFile) {
+        // ✅ Send FormData to API
         const formDataUpload = new FormData()
         formDataUpload.append("file", uploadedFile)
         formDataUpload.append("userId", user?.uid || "")
 
-        const pdfResponse = await fetch("/api/onboard/pdf", {
+        const pdfResponse = await fetch("/api/onboard/pdfupload", {
           method: "POST",
-          body: formDataUpload,
+          body: formDataUpload, // ❌ don’t set headers, browser will handle
         })
 
         if (!pdfResponse.ok) {
-          throw new Error("Failed to upload PDF")
+          const errText = await pdfResponse.text()
+          throw new Error(`PDF upload failed: ${errText}`)
         }
 
         const pdfResult = await pdfResponse.json()
-        console.log("PDF upload response:", pdfResult)
+        console.log("✅ PDF upload response:", pdfResult)
       } else {
+        // ✅ Save manual details
         await updateUserData({
           dreamJob: formData.dreamJob,
           education: formData.education,
@@ -146,15 +149,18 @@ export default function OnboardingPage() {
           body: JSON.stringify(submitData),
         })
 
-        if (!res.ok) throw new Error("Failed to submit onboarding")
+        if (!res.ok) {
+          const errText = await res.text()
+          throw new Error(`Onboarding submit failed: ${errText}`)
+        }
 
         const result = await res.json()
-        console.log("Backend response:", result)
+        console.log("✅ Backend response:", result)
       }
 
       router.push("/dashboard")
     } catch (error) {
-      console.error("Onboarding submission failed:", error)
+      console.error("❌ Onboarding submission failed:", error)
     } finally {
       setIsLoading(false)
     }
@@ -165,6 +171,7 @@ export default function OnboardingPage() {
 
   return (
     <ProtectedRoute>
+  <ProtectedRoute>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -421,6 +428,7 @@ export default function OnboardingPage() {
           </Card>
         </motion.div>
       </div>
+    </ProtectedRoute>
     </ProtectedRoute>
   )
 }

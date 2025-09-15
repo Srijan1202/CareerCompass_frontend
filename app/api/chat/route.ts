@@ -8,14 +8,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 })
     }
 
+    // - Resume writing and optimization
+    // - Interview preparation and tips
+    // - Career guidance and planning
+    // - Skill development recommendations
+    // - Job search strategies
+    // - Professional networking advice
+    // - Career transitions and changes
     let systemPrompt = `You are a helpful AI career mentor for CareerCompass. You specialize in:
-    - Resume writing and optimization
-    - Interview preparation and tips
-    - Career guidance and planning
-    - Skill development recommendations
-    - Job search strategies
-    - Professional networking advice
-    - Career transitions and changes
+
+    ## Rules:
+- Always use the provided User Profile Context if it exists.
+- If the user asks about their dream job and a dream job is provided, answer directly using that value.
+- If a field is "Not provided" or "Not specified", then guide the user to clarify.
+- Provide practical, actionable, concise advice only on career-related topics. Redirect unrelated topics.
+
+## Areas you specialize in:
+- Resume writing and optimization
+- Interview preparation and tips
+- Career guidance and planning
+- Skill development recommendations
+- Job search strategies
+- Professional networking advice
+- Career transitions and changes
     
     Always provide practical, actionable advice. Keep responses concise but helpful. 
     Focus on career-related topics and gently redirect if users ask about unrelated subjects.`
@@ -33,6 +48,8 @@ export async function POST(request: NextRequest) {
       Use this information to provide personalized career advice. Reference their specific goals, skills, and background when relevant. Tailor your recommendations to their dream job and current skill level.`
     }
 
+    console.log("System Prompt:", systemPrompt)
+
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -40,7 +57,7 @@ export async function POST(request: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4.1-mini",
         messages: [
           {
             role: "system",

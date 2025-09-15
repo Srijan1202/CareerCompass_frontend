@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server"
 
-const BACKEND_URL = "https://82ce67d3836c.ngrok-free.app/api/users/onboarding"
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_ONBOARDING_URL
+
+if (!BACKEND_URL) {
+  throw new Error("NEXT_PUBLIC_BACKEND_ONBOARDING_URL is not defined in environment variables.")
+}
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
 
     // Forward the request to Spring Boot backend
-    const res = await fetch(BACKEND_URL, {
+    const res = await fetch(BACKEND_URL as string, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

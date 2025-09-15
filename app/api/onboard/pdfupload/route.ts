@@ -1,6 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
+// This is a minor change to trigger Next.js route re-evaluation.
 
-const BACKEND_URL = "https://82ce67d3836c.ngrok-free.app/api/users/pdf-upload"
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_PDF_UPLOAD_URL
+
+if (!BACKEND_URL) {
+  throw new Error("NEXT_PUBLIC_BACKEND_PDF_UPLOAD_URL is not defined in environment variables.")
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,7 +13,10 @@ export async function POST(request: NextRequest) {
     const file = formData.get("file") as File
     const userId = formData.get("userId") as string
 
+    console.log("API Route: Received FormData. File:", file?.name, "UserId:", userId)
+
     if (!file) {
+      console.error("API Route: No file provided in FormData")
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
 
@@ -24,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Forward the PDF to Spring Boot backend
-    const response = await fetch(BACKEND_URL, {
+    const response = await fetch(BACKEND_URL as string, {
       method: "POST",
       body: backendFormData,
     })
