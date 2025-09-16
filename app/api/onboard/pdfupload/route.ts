@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 // This is a minor change to trigger Next.js route re-evaluation.
+export const dynamic = 'force-dynamic'; // Ensures the route is not statically optimized
+export const revalidate = 0; // Ensures the route is always fresh
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_PDF_UPLOAD_URL
 
@@ -7,6 +9,7 @@ if (!BACKEND_URL) {
   throw new Error("NEXT_PUBLIC_BACKEND_PDF_UPLOAD_URL is not defined in environment variables.")
 }
 
+console.log("PDF Upload Route: BACKEND_URL =", BACKEND_URL)
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()

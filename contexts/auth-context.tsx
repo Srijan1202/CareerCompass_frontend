@@ -18,16 +18,28 @@ interface AuthUser extends User {
   email: string | null
 }
 
-interface UserData {
+// ✅ Updated Student schema
+export interface UserData {
   uid: string
+  id?: string
+  name?: string
   email: string | null
-  displayName: string | null
-  dreamJob?: string
-  education?: string
-  skills?: string[]
-  interests?: string[]
-  achievements?: string
-  experience?: string
+  phone?: string
+  dob?: string
+  location?: string
+  currentEducation?: {
+    gradeLevel?: string
+    schoolName?: string
+    board?: string
+    percentage?: number | null
+    subjects?: string[]
+    expectedGraduationYear?: number | null
+  }
+  testScores?: {
+    testName: string
+    score: number | null
+    rank?: string
+  }[]
   createdAt?: Date
 }
 
@@ -47,9 +59,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function useAuth() {
   const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider")
   return context
 }
 
@@ -66,7 +76,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser as AuthUser)
-        // Fetch additional user data from Firestore
         await fetchUserData(firebaseUser.uid)
       } else {
         setUser(null)
@@ -74,16 +83,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
       setLoading(false)
     })
-
     return unsubscribe
   }, [])
 
   const fetchUserData = async (uid: string) => {
     try {
       const userDoc = await getDoc(doc(db, "users", uid))
-      if (userDoc.exists()) {
-        setUserData(userDoc.data() as UserData)
-      }
+      if (userDoc.exists()) setUserData(userDoc.data() as UserData)
     } catch (error) {
       console.error("Error fetching user data:", error)
     }
@@ -91,18 +97,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signUp = async (email: string, password: string, displayName: string) => {
     const { user: firebaseUser } = await createUserWithEmailAndPassword(auth, email, password)
-
-    // Update the user's display name
     await updateProfile(firebaseUser, { displayName })
-
-    // Create user document in Firestore
     const newUserData: UserData = {
       uid: firebaseUser.uid,
+      id: "stu_" + Date.now(),
+      name: displayName,
       email: firebaseUser.email,
-      displayName,
       createdAt: new Date(),
     }
-
     await setDoc(doc(db, "users", firebaseUser.uid), newUserData)
     setUserData(newUserData)
   }
@@ -113,14 +115,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signInWithGoogle = async () => {
     const { user: firebaseUser } = await signInWithPopup(auth, googleProvider)
-
-    // Check if user document exists, create if not
     const userDoc = await getDoc(doc(db, "users", firebaseUser.uid))
     if (!userDoc.exists()) {
       const newUserData: UserData = {
         uid: firebaseUser.uid,
+        id: "stu_" + Date.now(),
+        name: firebaseUser.displayName ?? undefined,
         email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
         createdAt: new Date(),
       }
       await setDoc(doc(db, "users", firebaseUser.uid), newUserData)
@@ -130,14 +131,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signInWithMicrosoft = async () => {
     const { user: firebaseUser } = await signInWithPopup(auth, microsoftProvider)
-
-    // Check if user document exists, create if not
     const userDoc = await getDoc(doc(db, "users", firebaseUser.uid))
     if (!userDoc.exists()) {
       const newUserData: UserData = {
         uid: firebaseUser.uid,
+        id: "stu_" + Date.now(),
+        name: firebaseUser.displayName ?? undefined,
         email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
         createdAt: new Date(),
       }
       await setDoc(doc(db, "users", firebaseUser.uid), newUserData)
@@ -145,13 +145,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  const logout = async () => {
-    await signOut(auth)
-  }
+  const logout = async () => await signOut(auth)
 
   const updateUserData = async (data: Partial<UserData>) => {
     if (!user) return
-
     const updatedData = { ...userData, ...data }
     await setDoc(doc(db, "users", user.uid), updatedData, { merge: true })
     setUserData(updatedData as UserData)
