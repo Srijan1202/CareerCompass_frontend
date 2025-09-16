@@ -5,13 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 import { Brain, Target, TrendingUp, User, Mail, Phone, MapPin, GraduationCap, Calendar, Award } from "lucide-react"
 import ProtectedRoute from "../../components/protected-route"
 import { useAuth } from "../../contexts/auth-context"
+import Navbar from "../../components/navbar"
 
 export default function DashboardPage() {
   const { user, userData } = useAuth()
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 pt-20 p-4">
+      <Navbar />
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 pt-20 p-4 mt-5">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

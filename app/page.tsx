@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import Navbar from "../components/navbar"
+import ChatbotWidget from "../components/chatbot-widget"
 
 export default function HomePage() {
   const fadeInUp = {
@@ -352,6 +353,7 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+      <ChatbotWidget />
     </div>
   )
 }

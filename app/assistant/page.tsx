@@ -10,6 +10,7 @@ import type { ConnectionDetails } from "../api/connection-details/route"
 import { Mic, Settings, ChevronDown, Volume2, Wifi, Circle, Loader2, Mail, MessageSquare } from "lucide-react"
 import { AudioVisualizerWithFallback } from "../../components/AudioVisualizer"
 import { MicrophoneSelector } from "../../components/MicrophoneSelector"
+import  Navbar  from "../../components/navbar"
 
 
 export default function AssistantPage() {
@@ -46,7 +47,9 @@ export default function AssistantPage() {
  
 
   return (
+    
     <div className="min-h-screen relative">
+      <Navbar />
       {/* Online Status - Top Right */}
       <div className="absolute top-6 right-8 z-10">
         <div className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
