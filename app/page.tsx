@@ -342,14 +342,12 @@ export default function HomePage() {
                 Built for hackathon • Powered by AI • Designed for your success
               </p>
               <div className="flex justify-center gap-6">
-                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground cursor-pointer">
                   <Github className="h-4 w-4 mr-2" />
                   View on GitHub
                 </Button>
               </div>
-              <div className="mt-8 pt-8 border-t border-border">
-                <p className="text-sm text-muted-foreground">© 2024 CareerCompass. Built with ❤️ for the hackathon.</p>
-              </div>
+          
             </motion.div>
           </div>
         </div>
