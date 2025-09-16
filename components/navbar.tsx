@@ -49,8 +49,8 @@ export default function Navbar() {
 
   const navItems = [
     {name:"Assistant", href:"/assistant"},
-    { name: "Features", href: "#features" },
-    { name: "How It Works", href: "#how-it-works" },
+    { name: "Exams", href: "/exams" },
+    { name: "Aptitude", href: "/aptitude-test" },
     { name: "About", href: "#about" },
   ]
 
