@@ -1,6 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-const BACKEND_URL = "https://82ce67d3836c.ngrok-free.app/api/auth/register"
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_REGISTER_URL
+
+if (!BACKEND_URL) {
+  throw new Error("NEXT_PUBLIC_BACKEND_REGISTER_URL environment variable is not defined");
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Forward the request to Spring Boot backend
-    const response = await fetch(BACKEND_URL, {
+    const response = await fetch(BACKEND_URL!, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

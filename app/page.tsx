@@ -26,6 +26,8 @@ export default function HomePage() {
     transition: { duration: 0.6 },
   }
 
+
+
   const staggerContainer = {
     animate: {
       transition: {
@@ -357,3 +359,4 @@ export default function HomePage() {
     </div>
   )
 }
+
