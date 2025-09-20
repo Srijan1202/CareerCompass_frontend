@@ -1,4 +1,8 @@
-// "use client"
+"use client"
+
+export default function AptitudeTestPage() {
+  return <div className="min-h-screen flex items-center justify-center">Aptitude Test Coming Soon!</div>
+}
 
 // import { useState, useEffect } from "react"
 // import { motion } from "framer-motion"
