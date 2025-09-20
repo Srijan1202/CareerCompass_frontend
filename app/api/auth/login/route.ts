@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-const BACKEND_URL = "https://82ce67d3836c.ngrok-free.app/api/auth/login"
+const BACKEND_URL = "https://user-service-53266248406.europe-west1.run.app/api/auth/login"
 
 export async function POST(request: NextRequest) {
   try {
