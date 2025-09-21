@@ -123,6 +123,10 @@ export default function ExamExplorer() {
     </div>
   )
 
+  function handleNotifyMe(id: string): void {
+    throw new Error("Function not implemented.")
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

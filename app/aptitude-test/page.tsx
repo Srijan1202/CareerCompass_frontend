@@ -38,7 +38,6 @@ export default function AptitudeTestPage() {
     initializeTest()
   }, [user, router])
 
-  // Initialize the test
   const initializeTest = async () => {
     const welcomeMessage: ChatMessage = {
       id: "welcome",
@@ -52,19 +51,11 @@ export default function AptitudeTestPage() {
     await fetchFirstQuestion()
   }
 
-  // Fetch the first question
   const fetchFirstQuestion = async () => {
     if (!user) return
     setIsLoading(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_START_URL
-      if (!apiUrl) throw new Error("Backend API URL is not defined in environment variables.")
-
-      const response = await fetch(`${apiUrl}/ai/start`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      })
-
+      const response = await fetch("/api/proxy") // Call proxy route
       if (response.ok) {
         const data = await response.json()
         const questionMessage: ChatMessage = {
@@ -84,7 +75,6 @@ export default function AptitudeTestPage() {
     }
   }
 
-  // Handle sending user message
   const handleSendMessage = async (message: string) => {
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -99,29 +89,26 @@ export default function AptitudeTestPage() {
     }
   }
 
-  // Submit answer and fetch next question
   const submitAnswer = async (answer: string) => {
     if (!currentQuestion) return
     setIsLoading(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_APPTITUDE_URL
-      if (!apiUrl) throw new Error("Backend API URL is not defined in environment variables.")
-
-      const url = `${apiUrl}/ai/question?ans=${encodeURIComponent(answer)}`
-      const response = await fetch(url, { method: "GET" })
-
+      const response = await fetch("/api/proxy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answer }),
+      })
       if (response.ok) {
-        const nextQuestion = await response.text()
-
-        if (nextQuestion && nextQuestion.trim().length > 0) {
+        const data = await response.json()
+        if (data.question && data.question.trim().length > 0) {
           const questionMessage: ChatMessage = {
             id: `question-${Date.now()}`,
-            content: nextQuestion,
+            content: data.question,
             sender: "bot",
             timestamp: new Date(),
           }
           setMessages((prev) => [...prev, questionMessage])
-          setCurrentQuestion({ id: `q-${Date.now()}`, question: nextQuestion, type: "text" })
+          setCurrentQuestion({ id: `q-${Date.now()}`, question: data.question, type: "text" })
           setProgress((prev) => Math.min(prev + 10, 100))
         } else {
           setTestCompleted(true)
@@ -136,7 +123,7 @@ export default function AptitudeTestPage() {
         }
       }
     } catch (err) {
-      console.error("Error fetching next question:", err)
+      console.error("Error submitting answer:", err)
     } finally {
       setIsLoading(false)
     }
